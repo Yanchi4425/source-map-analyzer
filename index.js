@@ -45,8 +45,24 @@ const retrieveOriginalSourcePosition = async (
     console.log(position);
 };
 
+const parseArguments = (arg) => {
+    const regex = /^(https?:\/\/.+):(\d+):(\d+)$/;
+    const match = arg.match(regex);
+    if (!match) {
+        throw new Error(
+            "Invalid argument format. Expected format: 'url:line:column'"
+        );
+    }
+    const [_, url, line, column] = match;
+    return {
+        url: `${url}.map`,
+        line: Number(line),
+        column: Number(column),
+    };
+};
+
 // コマンドライン引数からパラメータを取得
-const [, , sourceMapPathOrURL, line, column] = process.argv;
+const [, , arg] = process.argv;
+const { url, line, column } = parseArguments(arg);
 
-retrieveOriginalSourcePosition(sourceMapPathOrURL, line, column);
-
+retrieveOriginalSourcePosition(url, line, column);
