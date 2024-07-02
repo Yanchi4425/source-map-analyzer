@@ -55,6 +55,7 @@ const parseArguments = (arg) => {
     }
     const [_, url, line, column] = match;
     return {
+        originalUrl: url,
         url: `${url}.map`,
         line: Number(line),
         column: Number(column),
@@ -62,7 +63,10 @@ const parseArguments = (arg) => {
 };
 
 // コマンドライン引数からパラメータを取得
-const [, , arg] = process.argv;
-const { url, line, column } = parseArguments(arg);
+const args = process.argv.slice(2);
+const parsedArgs = args.map(parseArguments);
 
-retrieveOriginalSourcePosition(url, line, column);
+parsedArgs.forEach(async ({ originalUrl, url, line, column }) => {
+    console.log(`Processing: ${originalUrl}`);
+    await retrieveOriginalSourcePosition(url, line, column);
+});
