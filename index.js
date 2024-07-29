@@ -63,10 +63,7 @@ const parseArguments = (arg) => {
 };
 
 // コマンドライン引数からパラメータを取得
-const args = process.argv.slice(2);
-const parsedArgs = args.map(parseArguments);
+const [, , arg] = process.argv;
+const { url, line, column } = parseArguments(arg);
 
-parsedArgs.forEach(async ({ originalUrl, url, line, column }) => {
-    console.log(`Processing: ${originalUrl}`);
-    await retrieveOriginalSourcePosition(url, line, column);
-});
+retrieveOriginalSourcePosition(url, line, column);
