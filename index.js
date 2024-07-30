@@ -42,7 +42,9 @@ const retrieveOriginalSourcePosition = async (
         column: Number(column),
     });
 
-    console.log(position);
+    console.log(
+        `${position.source}:${position.line}:${position.column}:Method name => ${position.name}`
+    );
 };
 
 const parseArguments = (arg) => {
